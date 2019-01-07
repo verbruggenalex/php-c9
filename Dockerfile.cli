@@ -1,3 +1,4 @@
+ARG PHP_VERSION
 FROM thecodingmachine/php:${PHP_VERSION}-v2-cli-node10
 
 LABEL authors="Alex Verbruggen <verbruggenalex@gmail.com>"
