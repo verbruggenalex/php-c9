@@ -3,15 +3,15 @@ language: bash
 services: docker
 
 env:
-  - PHP_VERSION=7.1 VARIANT=apache
-  - PHP_VERSION=7.1 VARIANT=fpm
-  - PHP_VERSION=7.1 VARIANT=cli
+  # - PHP_VERSION=7.1 VARIANT=apache
+  # - PHP_VERSION=7.1 VARIANT=fpm
+  # - PHP_VERSION=7.1 VARIANT=cli
   - PHP_VERSION=7.2 VARIANT=apache
-  - PHP_VERSION=7.2 VARIANT=fpm
-  - PHP_VERSION=7.2 VARIANT=cli
-  - PHP_VERSION=7.3 VARIANT=apache
-  - PHP_VERSION=7.3 VARIANT=fpm
-  - PHP_VERSION=7.3 VARIANT=cli
+  # - PHP_VERSION=7.2 VARIANT=fpm
+  # - PHP_VERSION=7.2 VARIANT=cli
+  # - PHP_VERSION=7.3 VARIANT=apache
+  # - PHP_VERSION=7.3 VARIANT=fpm
+  # - PHP_VERSION=7.3 VARIANT=cli
 
 before_script:
   - env | sort
