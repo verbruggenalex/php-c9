@@ -19,7 +19,7 @@ before_script:
   - image="verbral/php-c9:$PHP_VERSION-$VARIANT"
 
 script:
-  - travis_retry docker build --build-arg "PHP_VERSION=$PHP_VERSION" -t "$image" -f "$file" .
+  - travis_retry docker build --build-arg "PHP_VERSION=$PHP_VERSION" --build-arg "VARIANT=$VARIANT" -t "$image" .
 
 after_script:
   - docker images
