@@ -20,28 +20,45 @@ documentation on usage please read TheCodingMachine's [README.md](https://github
 
 ## Docker-compose example
 
+This docker-compose.yml example contains the correct environment variables to
+use the dummy Cloud9 Runner shown below. This allows you to debug PHP code out
+of the box using this docker image.
+
 ```yaml
 version: '3'
 services:
   web:
     image: verbral/php-c9:7.2-apache
     environment:
-      APACHE_DOCUMENT_ROOT: web/
-      PHP_INI_MEMORY_LIMIT: 1g
-      PHP_INI_ERROR_REPORTING: E_ALL
       PHP_EXTENSION_XDEBUG: 1
-      PHP_EXTENSION_GD: 1
-      STARTUP_COMMAND_1: composer install
+      PHP_INI_XDEBUG__IDEKEY: cloud9ide
+      PHP_INI_XDEBUG__REMOTE_CONNECT_BACK: 0
+      PHP_INI_XDEBUG__REMOTE_HOST: localhost
     working_dir: /var/www/html
     volumes:
       - ${PWD}:/var/www/html
-      - ~/.ssh:/home/docker/.ssh
     ports:
-      - 80:80
+      - 81:80
       - 8181:8181
-  mysql:
-    image: percona/percona-server:5.7
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=drupal
+```
+
+## Dummy Cloud9 runner for xDebug
+
+This dummy runner for xDebug simulates a runner to get Cloud9 to listen for
+debug signals. To make use of this runner you are required to pass the xdebug
+variables shown in the docker-compose.yml example above.
+
+```json
+// This file contains a dummy runner to switch on xdebug.
+{
+  "script": [
+    "while true; do sleep 10;done"
+  ],
+  "selector": "^.*\\.(php|phar)$",
+  "info": "Running PHP script $file",
+  "working_dir": "$project_path",
+  "debugger": "xdebug",
+  "debugport": 9000,
+  "env": {}
+}
 ```
