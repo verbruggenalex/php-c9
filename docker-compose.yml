@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    image: verbral/php-c9:7.2-apache
+    environment:
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_INI_XDEBUG__IDEKEY: cloud9ide
+      PHP_INI_XDEBUG__REMOTE_CONNECT_BACK: 0
+      PHP_INI_XDEBUG__REMOTE_HOST: localhost
+    working_dir: /var/www/html
+    volumes:
+      - ${PWD}:/var/www/html
+      - ~/.ssh:/home/docker/.ssh
+    ports:
+      - 81:80
+      - 8181:8181

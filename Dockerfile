@@ -19,7 +19,7 @@ RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysq
 && docker-php-ext-install uploadprogress \
 && rm -rf /usr/src/php/ext/uploadprogress
 
-user docker
+USER docker
 
 # Install Cloud9 as docker.
 RUN git clone --depth 1 https://github.com/c9/core.git /home/docker/cloud9 \

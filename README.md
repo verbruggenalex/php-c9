@@ -17,3 +17,31 @@ documentation on usage please read TheCodingMachine's [README.md](https://github
 | [verbral/php-c9:7.1-apache](https://github.com/verbruggenalex/php-c9/blob/master/Dockerfile.apache)   | `7.1.x` | apache  | `10.x`| [![](https://images.microbadger.com/badges/image/verbral/php-c9:7.3-apache.svg)](https://microbadger.com/images/verbral/php-c9:7.3-apache)
 | [verbral/php-c9:7.1-cli](https://github.com/verbruggenalex/php-c9/blob/master/Dockerfile.cli)         | `7.1.x` | cli     | `10.x`| [![](https://images.microbadger.com/badges/image/verbral/php-c9:7.3-cli.svg)](https://microbadger.com/images/verbral/php-c9:7.3-cli)
 | [verbral/php-c9:7.1-fpm](https://github.com/verbruggenalex/php-c9/blob/master/Dockerfile.fpm)         | `7.1.x` | fpm     | `10.x`| [![](https://images.microbadger.com/badges/image/verbral/php-c9:7.3-fpm.svg)](https://microbadger.com/images/verbral/php-c9:7.3-fpm)
+
+## Docker-compose example
+
+```yaml
+version: '3'
+services:
+  web:
+    image: verbral/php-c9:7.2-apache
+    environment:
+      APACHE_DOCUMENT_ROOT: web/
+      PHP_INI_MEMORY_LIMIT: 1g
+      PHP_INI_ERROR_REPORTING: E_ALL
+      PHP_EXTENSION_XDEBUG: 1
+      PHP_EXTENSION_GD: 1
+      STARTUP_COMMAND_1: composer install
+    working_dir: /var/www/html
+    volumes:
+      - ${PWD}:/var/www/html
+      - ~/.ssh:/home/docker/.ssh
+    ports:
+      - 80:80
+      - 8181:8181
+  mysql:
+    image: percona/percona-server:5.7
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=drupal
+```

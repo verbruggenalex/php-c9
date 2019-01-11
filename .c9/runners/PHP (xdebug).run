@@ -1,0 +1,12 @@
+// This file contains a dummy runner to switch on xdebug.
+{
+  "script": [
+    "while true; do sleep 10;done"
+  ],
+  "selector": "^.*\\.(php|phar)$",
+  "info": "Running PHP script $file",
+  "working_dir": "$project_path",
+  "debugger": "xdebug",
+  "debugport": 9000,
+  "env": {}
+}

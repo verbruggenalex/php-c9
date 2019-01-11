@@ -1,0 +1,33 @@
+{
+    "build": {
+        "@saveall": true
+    },
+    "codeintel": {
+        "@dismiss_installer": true
+    },
+    "language": {
+        "tern_defs": {
+            "json()": {
+                "browser": {
+                    "enabled": true
+                },
+                "ecma5": {
+                    "enabled": true
+                },
+                "jQuery": {
+                    "enabled": true
+                }
+            }
+        }
+    },
+    "preview": {
+        "@url": "http://localhost"
+    },
+    "run": {
+        "@runner": "PHP (xdebug)",
+        "configs": {
+            "@inited": "true",
+            "json()": {}
+        }
+    }
+}
