@@ -37,6 +37,9 @@ RUN apt-get purge -y --auto-remove $buildDeps \
 
 USER docker
 
+# Remove symfony autocomplete. Can't get it to work on Cloud9.
+RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
+
 # Start Cloud9 in /var/www/html as docker.
 EXPOSE 8181
 WORKDIR /var/www/html
