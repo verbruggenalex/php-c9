@@ -61,5 +61,5 @@ EXPOSE 8181
 WORKDIR /var/www/html
 ENV PHP_EXTENSION_XDEBUG=1
 ENV XDEBUG_CONFIG="idekey=cloud9ide remote_connect_back=0 remote_host=localhost"
-ENV STARTUP_COMMAND_CLOUD9_1="cp -Rf /home/docker/.c9/runners/ \$PWD/.c9/ &"
+ENV STARTUP_COMMAND_CLOUD9_1="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
 ENV STARTUP_COMMAND_CLOUD9_2="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
