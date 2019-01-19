@@ -49,9 +49,9 @@ RUN sudo curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/dock
 # Install C9 plugins and runners.
 RUN mkdir -p ~/.c9/plugins/c9-walkatime \
 && git clone https://github.com/wakatime/c9-wakatime.git ~/.c9/plugins/c9-walkatime
-ADD ./.c9/init.js /home/docker/.c9/
-ADD ./.c9/user.settings /home/docker/.c9/
-RUN sudo chown docker:docker /home/docker/.c9
+ADD --chown=docker ./resources/c9/init.js /home/docker/.c9/
+ADD --chown=docker ./resources/c9/user.settings /home/docker/.c9/
+ADD --chown=docker ./resources/c9/runners /home/docker/.c9/runners
 
 # Remove symfony autocomplete. Can't get it to work on Cloud9.
 RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
@@ -61,4 +61,5 @@ EXPOSE 8181
 WORKDIR /var/www/html
 ENV PHP_EXTENSION_XDEBUG=1
 ENV XDEBUG_CONFIG="idekey=cloud9ide remote_connect_back=0 remote_host=localhost"
-ENV STARTUP_COMMAND_CLOUD9="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
+ENV STARTUP_COMMAND_CLOUD9_1="cp -Rf /home/docker/.c9/runners/ \$PWD/.c9/ &"
+ENV STARTUP_COMMAND_CLOUD9_2="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
