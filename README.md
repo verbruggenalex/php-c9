@@ -33,7 +33,7 @@ services:
     volumes:
       - ${PWD}:/var/www/html
     ports:
-      - 81:80
+      - 80:80
       - 8181:8181
 ```
 
@@ -57,3 +57,17 @@ variables shown in the docker-compose.yml example above.
   "env": {}
 }
 ```
+
+## Testing this image.
+
+```
+git clone https://github.com/verbruggenalex/php-c9.git
+cd php-c9
+docker-compose up -d
+```
+
+- Visit your container at port 8181 (Cloud9).
+- In Cloud 9 open up index.php and put a debug breakpoint next to line 3.
+-  Press Run > Run With > PHP (xdebug)
+-  Visit your container at port 80 (index.php).
+

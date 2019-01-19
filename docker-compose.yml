@@ -2,9 +2,12 @@ version: '3'
 services:
   web:
     image: verbral/php-c9:7.2-apache
-    working_dir: /var/www/html
+    working_dir: ${PWD}
+    environment:
+      APACHE_DOCUMENT_ROOT: ${PWD}
     volumes:
-      - ${PWD}:/var/www/html
+      - ${PWD}:${PWD}
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
       - 81:80
       - 8181:8181
