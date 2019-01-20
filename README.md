@@ -68,6 +68,6 @@ docker-compose up -d
 
 - Visit your container at port 8181 (Cloud9).
 - In Cloud 9 open up index.php and put a debug breakpoint next to line 3.
--  Press Run > Run With > PHP (xdebug)
--  Visit your container at port 80 (index.php).
+- Press Run > Run With > PHP (xdebug)
+- Visit your container at port 80 (index.php).
 

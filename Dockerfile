@@ -19,11 +19,11 @@ RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysq
 && docker-php-ext-install uploadprogress \
 && rm -rf /usr/src/php/ext/uploadprogress
 
-USER docker
+USER web
 
 # Install Cloud9 as docker.
-RUN git clone --depth 1 https://github.com/c9/core.git /home/docker/cloud9 \
-&& NO_PULL=1 /home/docker/cloud9/scripts/install-sdk.sh
+RUN git clone --depth 1 https://github.com/c9/core.git /home/web/cloud9 \
+&& NO_PULL=1 /home/web/cloud9/scripts/install-sdk.sh
 
 USER root
 
@@ -35,23 +35,26 @@ RUN apt-get purge -y --auto-remove $buildDeps \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 && npm cache clean --force
 
-USER docker
+USER web
 
-# Install docker CLI as root.
+# Install docker CLI.
 ENV DOCKERVERSION=18.06.1-ce
 RUN sudo curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
 && sudo tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker \
 && sudo rm docker-${DOCKERVERSION}.tgz \
-# Install docker-compose as root.
-&& sudo curl -L --fail https://github.com/docker/compose/releases/download/1.23.2/run.sh -o /usr/local/bin/docker-compose \
+## TODO: make GID match host system.
+&& sudo groupadd docker -g 999 \
+&& sudo usermod -aG docker web \
+# Install docker-compose.
+&& sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
 && sudo chmod +x /usr/local/bin/docker-compose
 
 # Install C9 plugins and runners.
 RUN mkdir -p ~/.c9/plugins/c9-walkatime \
 && git clone https://github.com/wakatime/c9-wakatime.git ~/.c9/plugins/c9-walkatime
-ADD --chown=docker ./resources/c9/init.js /home/docker/.c9/
-ADD --chown=docker ./resources/c9/user.settings /home/docker/.c9/
-ADD --chown=docker ./resources/c9/runners /home/docker/.c9/runners
+ADD --chown=web ./resources/c9/init.js /home/web/.c9/
+ADD --chown=web ./resources/c9/user.settings /home/web/.c9/
+ADD --chown=web ./resources/c9/runners /home/web/.c9/runners
 
 # Remove symfony autocomplete. Can't get it to work on Cloud9.
 RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
@@ -61,5 +64,6 @@ EXPOSE 8181
 WORKDIR /var/www/html
 ENV PHP_EXTENSION_XDEBUG=1
 ENV XDEBUG_CONFIG="idekey=cloud9ide remote_connect_back=0 remote_host=localhost"
-ENV STARTUP_COMMAND_CLOUD9_1="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
-ENV STARTUP_COMMAND_CLOUD9_2="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
+## TODO: Move runner into custom plugin.
+ENV STARTUP_COMMAND_CLOUD9_1="mkdir -p \$PWD/.c9 && cp -Rf /home/web/.c9/runners \$PWD/.c9 &"
+ENV STARTUP_COMMAND_CLOUD9_2="/usr/bin/node /home/web/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
