@@ -5,6 +5,7 @@ services:
     working_dir: ${PWD}
     environment:
       APACHE_DOCUMENT_ROOT: ${PWD}
+      WAKATIME_API_KEY: ${WAKATIME_API_KEY}
     volumes:
       - ${PWD}:${PWD}
       - /var/run/docker.sock:/var/run/docker.sock:ro

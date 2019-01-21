@@ -29,13 +29,24 @@ version: '3'
 services:
   web:
     image: verbral/php-c9:7.2-apache
-    working_dir: /var/www/html
+    working_dir: ${PWD}
+    environment:
+      APACHE_DOCUMENT_ROOT: ${PWD}
+      WAKATIME_API_KEY: ${WAKATIME_API_KEY}
     volumes:
-      - ${PWD}:/var/www/html
+      - ${PWD}:${PWD}
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:
-      - 80:80
+      - 81:80
       - 8181:8181
 ```
+
+### Extra features in this image:
+
+- for easy docker-compose usage in Cloud9 you can mount your
+  `/var/run/docker.sock` and use the same path as on your host with `${PWD}`.
+- for project time tracking you can use `${WAKATIME_API_KEY}` so the Cloud9
+  plugin will keep track.
 
 ## Dummy Cloud9 runner for xDebug
 

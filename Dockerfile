@@ -65,5 +65,6 @@ WORKDIR /var/www/html
 ENV PHP_EXTENSION_XDEBUG=1
 ENV XDEBUG_CONFIG="idekey=cloud9ide remote_connect_back=0 remote_host=localhost"
 ## TODO: Move runner into custom plugin.
-ENV STARTUP_COMMAND_CLOUD9_1="mkdir -p \$PWD/.c9 && cp -Rf /home/web/.c9/runners \$PWD/.c9 &"
-ENV STARTUP_COMMAND_CLOUD9_2="/usr/bin/node /home/web/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
+ENV STARTUP_COMMAND_CLOUD9_1='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/web/.c9/user.settings'
+ENV STARTUP_COMMAND_CLOUD9_2="mkdir -p \$PWD/.c9 && cp -Rf /home/web/.c9/runners \$PWD/.c9 &"
+ENV STARTUP_COMMAND_CLOUD9_3="/usr/bin/node /home/web/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"

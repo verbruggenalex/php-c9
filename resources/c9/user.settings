@@ -130,7 +130,7 @@
         "@default-complete": false
     },
     "wakatime": {
-        "@apikey": "ca60bd75-67ad-4161-8590-4739969f6d90",
+        "@apikey": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX",
         "@debug": false,
         "@exclude": ""
     }
