@@ -6,8 +6,8 @@ LABEL authors="Alex Verbruggen <verbruggenalex@gmail.com>"
 USER root
 
 # Install packages for use and setup of Cloud9 IDE as root.
-RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysql-client tmux" \
-&& apt-get update \
+RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysql-client rsync tmux" \
+&& apt-get update || apt-get update \
 && apt-get upgrade -y \
 && apt-get install -y $buildDeps $softDeps --no-install-recommends \
 && locale-gen en_US.UTF-8 \
