@@ -22,8 +22,8 @@ RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysq
 USER docker
 
 # Install Cloud9 as docker.
-RUN git clone --depth 1 https://github.com/c9/core.git /home/web/cloud9 \
-&& NO_PULL=1 /home/web/cloud9/scripts/install-sdk.sh
+RUN git clone --depth 1 https://github.com/c9/core.git /home/docker/cloud9 \
+&& NO_PULL=1 /home/docker/cloud9/scripts/install-sdk.sh
 
 USER root
 
