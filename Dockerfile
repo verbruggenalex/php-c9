@@ -1,6 +1,6 @@
 ARG PHP_VERSION
 ARG VARIANT
-FROM verbral/php:${PHP_VERSION}-v3-${VARIANT}-node10
+FROM verbral/php:${PHP_VERSION}-v2-${VARIANT}-node10
 LABEL authors="Alex Verbruggen <verbruggenalex@gmail.com>"
 
 USER root
@@ -19,7 +19,7 @@ RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysq
 && docker-php-ext-install uploadprogress \
 && rm -rf /usr/src/php/ext/uploadprogress
 
-USER web
+USER docker
 
 # Install Cloud9 as docker.
 RUN git clone --depth 1 https://github.com/c9/core.git /home/web/cloud9 \
@@ -35,26 +35,14 @@ RUN apt-get purge -y --auto-remove $buildDeps \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 && npm cache clean --force
 
-USER web
-
-# Install docker CLI.
-ENV DOCKERVERSION=18.06.1-ce
-RUN sudo curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
-&& sudo tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker \
-&& sudo rm docker-${DOCKERVERSION}.tgz \
-## TODO: make GID match host system.
-&& sudo groupadd docker -g 999 \
-&& sudo usermod -aG docker web \
-# Install docker-compose.
-&& sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
-&& sudo chmod +x /usr/local/bin/docker-compose
+USER docker
 
 # Install C9 plugins and runners.
 RUN mkdir -p ~/.c9/plugins/c9-walkatime \
 && git clone https://github.com/wakatime/c9-wakatime.git ~/.c9/plugins/c9-walkatime
-ADD --chown=web ./resources/c9/init.js /home/web/.c9/
-ADD --chown=web ./resources/c9/user.settings /home/web/.c9/
-ADD --chown=web ./resources/c9/runners /home/web/.c9/runners
+ADD --chown=docker ./resources/c9/init.js /home/docker/.c9/
+ADD --chown=docker ./resources/c9/user.settings /home/docker/.c9/
+ADD --chown=docker ./resources/c9/runners /home/docker/.c9/runners
 
 # Remove symfony autocomplete. Can't get it to work on Cloud9.
 RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
