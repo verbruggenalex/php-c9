@@ -29,22 +29,19 @@ version: '3'
 services:
   web:
     image: verbral/php-c9:7.2-apache
-    working_dir: ${PWD}
+    working_dir: /var/www/html
     environment:
-      APACHE_DOCUMENT_ROOT: ${PWD}
       WAKATIME_API_KEY: ${WAKATIME_API_KEY}
     volumes:
-      - ${PWD}:${PWD}
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./:/var/www/html
+      - ~/.ssh:/home/docker/.ssh
     ports:
-      - 81:80
       - 8181:8181
+      - 81:80
 ```
 
 ### Extra features in this image:
 
-- for easy docker-compose usage in Cloud9 you can mount your
-  `/var/run/docker.sock` and use the same path as on your host with `${PWD}`.
 - for project time tracking you can use `${WAKATIME_API_KEY}` so the Cloud9
   plugin will keep track.
 
@@ -80,5 +77,5 @@ docker-compose up -d
 - Visit your container at port 8181 (Cloud9).
 - In Cloud 9 open up index.php and put a debug breakpoint next to line 3.
 - Press Run > Run With > PHP (xdebug)
-- Visit your container at port 80 (index.php).
+- Visit your container at port 81 (index.php).
 

@@ -1,14 +1,15 @@
 version: '3'
 services:
+# ==============================================================================
   web:
     image: verbral/php-c9:7.2-apache
-    working_dir: ${PWD}
+    working_dir: /var/www/html
     environment:
-      APACHE_DOCUMENT_ROOT: ${PWD}
+#      APACHE_DOCUMENT_ROOT: web
       WAKATIME_API_KEY: ${WAKATIME_API_KEY}
     volumes:
-      - ${PWD}:${PWD}
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./:/var/www/html
+      - ~/.ssh:/home/docker/.ssh
     ports:
-      - 81:80
       - 8181:8181
+      - 81:80

@@ -52,6 +52,10 @@ EXPOSE 8181
 WORKDIR /var/www/html
 ENV PHP_EXTENSION_XDEBUG=1
 ENV XDEBUG_CONFIG="idekey=cloud9ide remote_connect_back=0 remote_host=localhost"
+ENV PHP_EXTENSION_BLACKFIRE=1
+ENV PHP_EXTENSION_GD=1
+ENV PHP_INI_ERROR_REPORTING=E_ALL
+ENV PHP_INI_MEMORY_LIMIT=2g
 ## TODO: Move runner into custom plugin.
 ENV STARTUP_COMMAND_CLOUD9_1='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/docker/.c9/user.settings'
 ENV STARTUP_COMMAND_CLOUD9_2="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
