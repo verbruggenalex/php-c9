@@ -47,6 +47,13 @@ ADD --chown=docker ./resources/c9/runners /home/docker/.c9/runners
 # Remove symfony autocomplete. Can't get it to work on Cloud9.
 RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
 
+# Install composer global packages
+RUN composer global install
+
+# Add .c9 to global .gitignore file.
+ADD --chown=docker ./resources/git/.gitignore_global /home/docker/.gitignore_global
+RUN git config --global core.excludesfile ~/.gitignore_global
+
 # Start Cloud9 in /var/www/html as docker.
 EXPOSE 8181
 WORKDIR /var/www/html
@@ -58,5 +65,8 @@ ENV PHP_INI_ERROR_REPORTING=E_ALL
 ENV PHP_INI_MEMORY_LIMIT=2g
 ## TODO: Move runner into custom plugin.
 ENV STARTUP_COMMAND_CLOUD9_1='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/docker/.c9/user.settings'
-ENV STARTUP_COMMAND_CLOUD9_2="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
-ENV STARTUP_COMMAND_CLOUD9_3="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
+ENV STARTUP_COMMAND_CLOUD9_2='[ -z "$GIT_USER_NAME" ] || git config --global user.name "$GIT_USER_NAME"'
+ENV STARTUP_COMMAND_CLOUD9_3='[ -z "$GIT_USER_EMAIL" ] || git config --global user.email "$GIT_USER_EMAIL"'
+ENV STARTUP_COMMAND_CLOUD9_4='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/docker/.c9/user.settings'
+ENV STARTUP_COMMAND_CLOUD9_5="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
+ENV STARTUP_COMMAND_CLOUD9_6="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"

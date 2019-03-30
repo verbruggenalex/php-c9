@@ -5,7 +5,8 @@ services:
     image: verbral/php-c9:7.2-apache
     working_dir: /var/www/html
     environment:
-#      APACHE_DOCUMENT_ROOT: web
+      GIT_USER_NAME: ${GIT_USER_NAME}
+      GIT_USER_EMAIL: ${GIT_USER_EMAIL}
       WAKATIME_API_KEY: ${WAKATIME_API_KEY}
     volumes:
       - ./:/var/www/html

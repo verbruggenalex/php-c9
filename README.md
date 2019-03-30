@@ -31,6 +31,8 @@ services:
     image: verbral/php-c9:7.2-apache
     working_dir: /var/www/html
     environment:
+      GIT_USER_NAME: ${GIT_USER_NAME}
+      GIT_USER_EMAIL: ${GIT_USER_EMAIL}
       WAKATIME_API_KEY: ${WAKATIME_API_KEY}
     volumes:
       - ./:/var/www/html
@@ -41,7 +43,8 @@ services:
 ```
 
 ### Extra features in this image:
-
+- for git name and email use `${GIT_USER_NAME}` and `${GIT_USER_EMAIL}` so
+  you are committing with the correct name and email.
 - for project time tracking you can use `${WAKATIME_API_KEY}` so the Cloud9
   plugin will keep track.
 
@@ -78,4 +81,3 @@ docker-compose up -d
 - In Cloud 9 open up index.php and put a debug breakpoint next to line 3.
 - Press Run > Run With > PHP (xdebug)
 - Visit your container at port 81 (index.php).
-
