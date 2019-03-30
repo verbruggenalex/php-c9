@@ -63,10 +63,9 @@ ENV PHP_EXTENSION_BLACKFIRE=1
 ENV PHP_EXTENSION_GD=1
 ENV PHP_INI_ERROR_REPORTING=E_ALL
 ENV PHP_INI_MEMORY_LIMIT=2g
-## TODO: Move runner into custom plugin.
 ENV STARTUP_COMMAND_CLOUD9_1='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/docker/.c9/user.settings'
 ENV STARTUP_COMMAND_CLOUD9_2='[ -z "$GIT_USER_NAME" ] || git config --global user.name "$GIT_USER_NAME"'
 ENV STARTUP_COMMAND_CLOUD9_3='[ -z "$GIT_USER_EMAIL" ] || git config --global user.email "$GIT_USER_EMAIL"'
-ENV STARTUP_COMMAND_CLOUD9_4='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/docker/.c9/user.settings'
-ENV STARTUP_COMMAND_CLOUD9_5="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
-ENV STARTUP_COMMAND_CLOUD9_6="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
+## TODO: Move runner into custom plugin.
+ENV STARTUP_COMMAND_CLOUD9_4="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
+ENV STARTUP_COMMAND_CLOUD9_5="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"

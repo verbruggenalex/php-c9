@@ -43,8 +43,8 @@ services:
 ```
 
 ### Extra features in this image:
-- for git name and email use `${GIT_USER_NAME}` and `${GIT_USER_EMAIL}` so
-  you are committing with the correct name and email.
+- use `${GIT_USER_NAME}` and `${GIT_USER_EMAIL}` so you are committing with your
+  correct name and email.
 - for project time tracking you can use `${WAKATIME_API_KEY}` so the Cloud9
   plugin will keep track.
 
