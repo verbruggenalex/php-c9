@@ -12,7 +12,6 @@ RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysq
 && apt-get install -y $buildDeps $softDeps --no-install-recommends \
 && locale-gen en_US.UTF-8 \
 && localedef -f UTF-8 -i en_US en_US.UTF-8 \
-
 # Install PECL uploadprogress library for Drupal as root.
 && git clone https://github.com/php/pecl-php-uploadprogress/ /usr/src/php/ext/uploadprogress/ \
 && docker-php-ext-configure uploadprogress \
