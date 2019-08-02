@@ -18,11 +18,11 @@ RUN buildDeps='make build-essential g++ gcc python2.7' && softDeps="locales mysq
 && docker-php-ext-install uploadprogress \
 && rm -rf /usr/src/php/ext/uploadprogress
 
-USER docker
+USER web
 
-# Install Cloud9 as docker.
-RUN git clone --depth 1 https://github.com/c9/core.git /home/docker/cloud9 \
-&& NO_PULL=1 /home/docker/cloud9/scripts/install-sdk.sh
+# Install Cloud9 as web.
+RUN git clone --depth 1 https://github.com/c9/core.git /home/web/cloud9 \
+&& NO_PULL=1 /home/web/cloud9/scripts/install-sdk.sh
 
 USER root
 
@@ -34,14 +34,26 @@ RUN apt-get purge -y --auto-remove $buildDeps \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
 && npm cache clean --force
 
-USER docker
+USER web
+
+# Install docker CLI.
+ENV DOCKERVERSION=18.06.1-ce
+RUN sudo curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKERVERSION}.tgz \
+&& sudo tar xzvf docker-${DOCKERVERSION}.tgz --strip 1 -C /usr/local/bin docker/docker \
+&& sudo rm docker-${DOCKERVERSION}.tgz \
+## TODO: make GID match host system.
+&& sudo groupadd docker -g 999 \
+&& sudo usermod -aG docker web \
+# Install docker-compose.
+&& sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+&& sudo chmod +x /usr/local/bin/docker-compose
 
 # Install C9 plugins and runners.
 RUN mkdir -p ~/.c9/plugins/c9-walkatime \
 && git clone https://github.com/wakatime/c9-wakatime.git ~/.c9/plugins/c9-walkatime
-ADD --chown=docker ./resources/c9/init.js /home/docker/.c9/
-ADD --chown=docker ./resources/c9/user.settings /home/docker/.c9/
-ADD --chown=docker ./resources/c9/runners /home/docker/.c9/runners
+ADD --chown=web ./resources/c9/init.js /home/web/.c9/
+ADD --chown=web ./resources/c9/user.settings /home/web/.c9/
+ADD --chown=web ./resources/c9/runners /home/web/.c9/runners
 
 # Remove symfony autocomplete. Can't get it to work on Cloud9.
 RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
@@ -50,10 +62,10 @@ RUN sed -i '/symfony-autocomplete/d' ~/.bash_profile
 RUN composer global install
 
 # Add .c9 to global .gitignore file.
-ADD --chown=docker ./resources/git/.gitignore_global /home/docker/.gitignore_global
+ADD --chown=web ./resources/git/.gitignore_global /home/web/.gitignore_global
 RUN git config --global core.excludesfile ~/.gitignore_global
 
-# Start Cloud9 in /var/www/html as docker.
+# Start Cloud9 in /var/www/html as web.
 EXPOSE 8181
 WORKDIR /var/www/html
 ENV PHP_EXTENSION_XDEBUG=1
@@ -62,9 +74,9 @@ ENV PHP_EXTENSION_BLACKFIRE=1
 ENV PHP_EXTENSION_GD=1
 ENV PHP_INI_ERROR_REPORTING=E_ALL
 ENV PHP_INI_MEMORY_LIMIT=2g
-ENV STARTUP_COMMAND_CLOUD9_1='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/docker/.c9/user.settings'
+ENV STARTUP_COMMAND_CLOUD9_1='sed -i "s/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXX/$WAKATIME_API_KEY/g"  /home/web/.c9/user.settings'
 ENV STARTUP_COMMAND_CLOUD9_2='[ -z "$GIT_USER_NAME" ] || git config --global user.name "$GIT_USER_NAME"'
 ENV STARTUP_COMMAND_CLOUD9_3='[ -z "$GIT_USER_EMAIL" ] || git config --global user.email "$GIT_USER_EMAIL"'
 ## TODO: Move runner into custom plugin.
-ENV STARTUP_COMMAND_CLOUD9_4="mkdir -p \$PWD/.c9 && cp -Rf /home/docker/.c9/runners \$PWD/.c9 &"
-ENV STARTUP_COMMAND_CLOUD9_5="/usr/bin/node /home/docker/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
+ENV STARTUP_COMMAND_CLOUD9_4="mkdir -p \$PWD/.c9 && cp -Rf /home/web/.c9/runners \$PWD/.c9 &"
+ENV STARTUP_COMMAND_CLOUD9_5="/usr/bin/node /home/web/cloud9/server.js -l 0.0.0.0 -p 8181 -w \$PWD -a : &"
